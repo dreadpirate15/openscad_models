@@ -1,23 +1,35 @@
-internal_rad = 4;
-base_width = 18;
+bar_diameter = 35.3;
+base_width = bar_diameter + 30;
+base_depth = bar_diameter - 10;
+base_height = bar_diameter / 2 + 5;
+bar_rad = bar_diameter /2;
+
+screw_diameter = 3.5;
+screw_head = 7;
 
 difference() {
-	// base cube
-	cube([base_width, 8, 6], center=true);
-	// cylinder difference for handlbar
-	translate([0,5,3])
-		rotate([90,0,0]) cylinder(h=9, r=internal_rad, $fn=100);
-	// cube difference to remove extra volume
-	translate([7,0,-2])
-		cube([4,8,4], center=true);
-	translate([-7,0,-2])
-		cube([4,8,4], center=true);
-	translate([-7,0,0]) {
-		cylinder(h=2, r=1.5, center=true, $fn=6);
-		cylinder(h=8, r=1, center=true, $fn=100);
+
+		// base cube
+	cube([base_width, base_depth, base_height]);
+
+		// cylinder difference for handlbar
+	translate([base_width / 2,base_depth + 1,bar_rad + 5])
+		rotate([90,0,0]) cylinder(h=base_depth + 2, r=bar_rad, $fn=100);
+
+		// cube difference to remove extra volume
+	translate([0,0,0])
+		cube([10,base_depth,base_height-10]);
+	translate([base_width-10,0,0])
+		cube([10,base_depth,base_height-10]);
+
+		// screw hole
+	translate([base_width -5,base_depth/2,base_height-10]) {
+		cylinder(h=2, r=screw_head/2, $fn=6);
+		cylinder(h=10, r=screw_diameter/2, $fn=100);
 	}
-	translate([7,0,0]) {
-		cylinder(h=2, r=1.5, center=true, $fn=6);
-		cylinder(h=8, r=1, center=true, $fn=100);
+
+	translate([5,base_depth/2,base_height-10]) {
+		cylinder(h=2, r=screw_head/2, $fn=6);
+		cylinder(h=10, r=screw_diameter/2, $fn=100);
 	}
 }
